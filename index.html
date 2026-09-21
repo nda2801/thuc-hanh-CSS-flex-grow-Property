@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>[Thực hành] CSS | flex-grow Property</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="page-wrapper">
+    <!-- Header -->
+    <header class="header">
+      <div class="badge-pill">
+        <span class="badge-dot"></span>
+        <span>CSS Flexbox Mastery Series</span>
+      </div>
+      <h1 class="main-title">[Thực hành] Thuộc tính flex-grow trong CSS</h1>
+      <p class="subtitle">
+        Tìm hiểu cách thuộc tính <code>flex-grow</code> kiểm soát mức độ mở rộng và hấp thụ khoảng trống thừa của một flex item so với các phần tử anh em khác trong cùng flex container.
+      </p>
+      <div class="nav-links">
+        <a href="#theory" class="nav-btn">Lý thuyết & Cú pháp</a>
+        <a href="#formula" class="nav-btn">Công thức tính toán</a>
+        <a href="#standard-example" class="nav-btn">Ví dụ chuẩn đề bài (5 Div)</a>
+        <a href="#playground" class="nav-btn primary">Interactive Playground</a>
+        <a href="example.html" target="_blank" class="nav-btn outline">Mở file ví dụ riêng ↗</a>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="content-container">
+      
+      <!-- Section 1: Lý thuyết & Cú pháp -->
+      <section id="theory" class="card">
+        <div class="card-header">
+          <div class="card-icon">📖</div>
+          <div>
+            <h2 class="card-title">1. Khái niệm & Cú pháp flex-grow</h2>
+            <p class="card-desc">Hiểu rõ bản chất cách thức hoạt động của thuộc tính phát triển kích thước</p>
+          </div>
+        </div>
+
+        <div class="card-body">
+          <div class="concept-intro">
+            <p>
+              Thuộc tính <strong>flex-grow</strong> chỉ định item sẽ tăng bao nhiêu so với các item khác bên trong vùng chứa. Nói cách khác, đó là khả năng phát triển của một item so với các item khác có bên trong cùng một vùng chứa khi còn khoảng trống (remaining free space).
+            </p>
+          </div>
+
+          <div class="alert-box alert-warning">
+            <div class="alert-icon">⚠️</div>
+            <div class="alert-text">
+              <strong>Lưu ý quan trọng:</strong> Nếu item trong vùng chứa không phải là flex item (tức là không phải con trực tiếp của container có <code>display: flex</code> hoặc <code>display: inline-flex</code>) thì thuộc tính <code>flex-grow</code> sẽ <strong>không có bất kỳ tác dụng nào</strong> đối với item đó.
+            </div>
+          </div>
+
+          <h3 class="subsection-title">Cú pháp:</h3>
+          <div class="syntax-wrapper">
+            <code>flex-grow: &lt;number&gt; | initial | inherit;</code>
+            <button class="copy-btn" onclick="copyText('flex-grow: number | initial | inherit;', this)">Sao chép</button>
+          </div>
+
+          <h3 class="subsection-title">Các giá trị của thuộc tính:</h3>
+          <div class="property-grid">
+            <div class="prop-card">
+              <div class="prop-badge">number</div>
+              <div class="prop-meta">Mặc định: <code>0</code></div>
+              <p class="prop-detail">
+                Một số (không có đơn vị) xác định item sẽ phát triển như thế nào so với các flex item khác. Số càng lớn thì item nhận được càng nhiều tỷ lệ khoảng trống còn thừa. Nếu bằng <code>0</code>, item giữ nguyên kích thước ban đầu, không nở rộng.
+              </p>
+            </div>
+
+            <div class="prop-card">
+              <div class="prop-badge">initial</div>
+              <div class="prop-meta">Giá trị khởi tạo</div>
+              <p class="prop-detail">
+                Nó đặt giá trị của thuộc tính thành giá trị mặc định của CSS (tương đương với <code>flex-grow: 0</code>).
+              </p>
+            </div>
+
+            <div class="prop-card">
+              <div class="prop-badge">inherit</div>
+              <div class="prop-meta">Kế thừa</div>
+              <p class="prop-detail">
+                Kế thừa giá trị thuộc tính <code>flex-grow</code> từ phần tử mẹ (parent element) của nó.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 2: Công thức tính toán không gian thừa -->
+      <section id="formula" class="card">
+        <div class="card-header">
+          <div class="card-icon">📐</div>
+          <div>
+            <h2 class="card-title">2. Cơ chế toán học đằng sau flex-grow</h2>
+            <p class="card-desc">Làm thế nào trình duyệt quyết định chính xác số pixel item sẽ nở rộng?</p>
+          </div>
+        </div>
+
+        <div class="card-body">
+          <p>
+            Khi một container có chiều rộng cố định (ví dụ 800px) và tổng kích thước cơ sở ban đầu (<code>flex-basis</code> hoặc <code>width</code>) của các phần tử con nhỏ hơn 800px, phần diện tích còn lại gọi là <strong>Khoảng trống thừa (Free Space)</strong>.
+          </p>
+
+          <div class="formula-cards">
+            <div class="formula-box">
+              <div class="formula-tag">Bước 1: Tính khoảng trống thừa</div>
+              <div class="formula-math">
+                Remaining Space = Container Width - ∑(Kích thước cơ sở ban đầu của các item)
+              </div>
+            </div>
+
+            <div class="formula-box">
+              <div class="formula-tag">Bước 2: Phân bổ không gian thừa cho từng item</div>
+              <div class="formula-math">
+                Không gian nhận thêm = (flex-grow của item / ∑ flex-grow các item) × Remaining Space
+              </div>
+            </div>
+
+            <div class="formula-box highlight">
+              <div class="formula-tag">Bước 3: Kích thước cuối cùng</div>
+              <div class="formula-math">
+                Kích thước thực tế = Kích thước ban đầu + Không gian nhận thêm
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 3: Ví dụ chuẩn theo đề bài -->
+      <section id="standard-example" class="card">
+        <div class="card-header">
+          <div class="card-icon">🎯</div>
+          <div>
+            <h2 class="card-title">3. Ví dụ chuẩn: Vùng chứa gồm 5 thẻ Div (Div 2 nở rộng)</h2>
+            <p class="card-desc">
+              Theo yêu cầu đề bài: "Ở đây chúng ta sẽ thấy trong một vùng chứa có 5 div, chúng ta sẽ áp dụng <code>flex-grow</code>: Trên div thứ 2 và div đó sẽ tăng so với 4 div khác."
+            </p>
+          </div>
+        </div>
+
+        <div class="card-body">
+          <div class="example-presentation">
+            <div class="tabs">
+              <button class="tab-btn active" data-tab="scenario-a">Trường hợp A: Div 2 (flex-grow: 1), các Div khác (flex-grow: 0)</button>
+              <button class="tab-btn" data-tab="scenario-b">Trường hợp B: Div 2 (flex-grow: 3), các Div khác (flex-grow: 1)</button>
+              <button class="tab-btn" data-tab="scenario-c">Trường hợp C: Tất cả flex-grow: 1 (Chia đều)</button>
+            </div>
+
+            <div class="tab-contents">
+              <!-- Scenario A -->
+              <div id="scenario-a" class="tab-pane active">
+                <div class="scenario-explainer">
+                  <span class="badge-blue">Mô tả đề bài chính</span>
+                  <p>4 thẻ Div (1, 3, 4, 5) giữ nguyên kích thước ban đầu (<code>flex-grow: 0</code>). <strong>Div thứ 2 có <code>flex-grow: 1</code></strong> nên nó nuốt trọn 100% không gian trống còn lại trong container!</p>
+                </div>
+
+                <div class="preview-box">
+                  <div class="preview-header">
+                    <span>Trực quan hóa: Flex Container (100% Width)</span>
+                    <span class="preview-state">Div 2 chiếm trọn không gian trống</span>
+                  </div>
+                  <div class="demo-flex-container case-a">
+                    <div class="demo-item item-1">
+                      <span class="item-index">Div 1</span>
+                      <span class="item-grow-val">grow: 0</span>
+                      <span class="item-size-badge" id="size-a-1">--px</span>
+                    </div>
+                    <div class="demo-item item-2 highlighted">
+                      <span class="item-index">★ Div 2 (Tăng trưởng)</span>
+                      <span class="item-grow-val">grow: 1 (Hấp thụ toàn bộ)</span>
+                      <span class="item-size-badge" id="size-a-2">--px</span>
+                    </div>
+                    <div class="demo-item item-3">
+                      <span class="item-index">Div 3</span>
+                      <span class="item-grow-val">grow: 0</span>
+                      <span class="item-size-badge" id="size-a-3">--px</span>
+                    </div>
+                    <div class="demo-item item-4">
+                      <span class="item-index">Div 4</span>
+                      <span class="item-grow-val">grow: 0</span>
+                      <span class="item-size-badge" id="size-a-4">--px</span>
+                    </div>
+                    <div class="demo-item item-5">
+                      <span class="item-index">Div 5</span>
+                      <span class="item-grow-val">grow: 0</span>
+                      <span class="item-size-badge" id="size-a-5">--px</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="code-viewer">
+                  <div class="code-bar">
+                    <span>Mã nguồn CSS & HTML:</span>
+                    <button class="copy-code-btn" onclick="copyCode('code-case-a', this)">Sao chép Code</button>
+                  </div>
+                  <pre><code id="code-case-a">/* HTML */
+&lt;div class="container"&gt;
+  &lt;div class="item item-1"&gt;Div 1&lt;/div&gt;
+  &lt;div class="item item-2"&gt;Div 2&lt;/div&gt;
+  &lt;div class="item item-3"&gt;Div 3&lt;/div&gt;
+  &lt;div class="item item-4"&gt;Div 4&lt;/div&gt;
+  &lt;div class="item item-5"&gt;Div 5&lt;/div&gt;
+&lt;/div&gt;
+
+/* CSS */
+.container {
+  display: flex;
+  background-color: #1e293b;
+  padding: 16px;
+  gap: 12px;
+}
+
+.item {
+  background-color: #3b82f6;
+  color: #ffffff;
+  padding: 20px 16px;
+  text-align: center;
+  flex-grow: 0; /* Mặc định các div không tăng trưởng */
+  width: 100px;
+}
+
+/* Áp dụng flex-grow trên div thứ 2 */
+.item-2 {
+  background-color: #f59e0b; /* Làm nổi bật */
+  flex-grow: 1; /* Div 2 nhận toàn bộ phần không gian trống còn lại */
+}</code></pre>
+                </div>
+              </div>
+
+              <!-- Scenario B -->
+              <div id="scenario-b" class="tab-pane">
+                <div class="scenario-explainer">
+                  <span class="badge-purple">Tỷ lệ so sánh</span>
+                  <p>Tất cả 5 Div đều cùng nở rộng, nhưng <strong>Div thứ 2 có <code>flex-grow: 3</code></strong> (gấp 3 lần các Div khác có <code>flex-grow: 1</code>). Tổng tỷ lệ = 1 + 3 + 1 + 1 + 1 = 7. Div 2 nhận 3/7 khoảng trống thừa!</p>
+                </div>
+
+                <div class="preview-box">
+                  <div class="preview-header">
+                    <span>Trực quan hóa: Tỷ lệ phân phối 1 : 3 : 1 : 1 : 1</span>
+                    <span class="preview-state">Div 2 nhận 3 phần, các div khác nhận 1 phần</span>
+                  </div>
+                  <div class="demo-flex-container case-b">
+                    <div class="demo-item item-1">
+                      <span class="item-index">Div 1</span>
+                      <span class="item-grow-val">grow: 1</span>
+                      <span class="item-size-badge" id="size-b-1">--px</span>
+                    </div>
+                    <div class="demo-item item-2 highlighted-purple">
+                      <span class="item-index">★ Div 2 (Tăng gấp 3)</span>
+                      <span class="item-grow-val">grow: 3 (3/7 space)</span>
+                      <span class="item-size-badge" id="size-b-2">--px</span>
+                    </div>
+                    <div class="demo-item item-3">
+                      <span class="item-index">Div 3</span>
+                      <span class="item-grow-val">grow: 1</span>
+                      <span class="item-size-badge" id="size-b-3">--px</span>
+                    </div>
+                    <div class="demo-item item-4">
+                      <span class="item-index">Div 4</span>
+                      <span class="item-grow-val">grow: 1</span>
+                      <span class="item-size-badge" id="size-b-4">--px</span>
+                    </div>
+                    <div class="demo-item item-5">
+                      <span class="item-index">Div 5</span>
+                      <span class="item-grow-val">grow: 1</span>
+                      <span class="item-size-badge" id="size-b-5">--px</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="code-viewer">
+                  <div class="code-bar">
+                    <span>Mã nguồn CSS (Trường hợp B):</span>
+                    <button class="copy-code-btn" onclick="copyCode('code-case-b', this)">Sao chép Code</button>
+                  </div>
+                  <pre><code id="code-case-b">.container {
+  display: flex;
+  gap: 12px;
+}
+
+.item {
+  width: 80px;
+  flex-grow: 1; /* Mỗi item nhận 1/7 khoảng trống thừa */
+}
+
+.item-2 {
+  flex-grow: 3; /* Item 2 nhận 3/7 khoảng trống thừa (tăng gấp 3 lần) */
+}</code></pre>
+                </div>
+              </div>
+
+              <!-- Scenario C -->
+              <div id="scenario-c" class="tab-pane">
+                <div class="scenario-explainer">
+                  <span class="badge-green">Chia đều</span>
+                  <p>Cả 5 Div đều có <code>flex-grow: 1</code>. Khoảng trống thừa được chia làm 5 phần bằng nhau, mỗi div nhận thêm 1 phần bằng nhau.</p>
+                </div>
+
+                <div class="preview-box">
+                  <div class="preview-header">
+                    <span>Trực quan hóa: Tất cả item đều flex-grow: 1</span>
+                    <span class="preview-state">Tất cả chia đều 100% không gian</span>
+                  </div>
+                  <div class="demo-flex-container case-c">
+                    <div class="demo-item item-1">
+                      <span class="item-index">Div 1</span>
+                      <span class="item-grow-val">grow: 1</span>
+                      <span class="item-size-badge" id="size-c-1">--px</span>
+                    </div>
+                    <div class="demo-item item-2">
+                      <span class="item-index">Div 2</span>
+                      <span class="item-grow-val">grow: 1</span>
+                      <span class="item-size-badge" id="size-c-2">--px</span>
+                    </div>
+                    <div class="demo-item item-3">
+                      <span class="item-index">Div 3</span>
+                      <span class="item-grow-val">grow: 1</span>
+                      <span class="item-size-badge" id="size-c-3">--px</span>
+                    </div>
+                    <div class="demo-item item-4">
+                      <span class="item-index">Div 4</span>
+                      <span class="item-grow-val">grow: 1</span>
+                      <span class="item-size-badge" id="size-c-4">--px</span>
+                    </div>
+                    <div class="demo-item item-5">
+                      <span class="item-index">Div 5</span>
+                      <span class="item-grow-val">grow: 1</span>
+                      <span class="item-size-badge" id="size-c-5">--px</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="code-viewer">
+                  <div class="code-bar">
+                    <span>Mã nguồn CSS (Trường hợp C):</span>
+                    <button class="copy-code-btn" onclick="copyCode('code-case-c', this)">Sao chép Code</button>
+                  </div>
+                  <pre><code id="code-case-c">.container {
+  display: flex;
+  gap: 12px;
+}
+
+.item {
+  flex-grow: 1; /* Cả 5 item đều chia đều khoảng trống */
+}</code></pre>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 4: Interactive Playground -->
+      <section id="playground" class="card highlight-card">
+        <div class="card-header">
+          <div class="card-icon">⚡</div>
+          <div>
+            <h2 class="card-title">4. Phòng thí nghiệm tương tác (Interactive Live Playground)</h2>
+            <p class="card-desc">Tùy biến <code>flex-grow</code> của từng div trong 5 thẻ và quan sát tính toán trực tiếp thời gian thực!</p>
+          </div>
+        </div>
+
+        <div class="card-body">
+          <!-- Preset buttons -->
+          <div class="playground-presets">
+            <span class="preset-label">Nút chọn nhanh cấu hình:</span>
+            <button class="preset-btn" onclick="applyPreset([0, 1, 0, 0, 0])">🎯 Đề bài: Div 2 = 1, các Div = 0</button>
+            <button class="preset-btn" onclick="applyPreset([1, 4, 1, 1, 1])">🚀 Div 2 cực đại (grow: 4)</button>
+            <button class="preset-btn" onclick="applyPreset([1, 1, 1, 1, 1])">⚖️ Chia đều (Tất cả = 1)</button>
+            <button class="preset-btn" onclick="applyPreset([1, 2, 3, 2, 1])">📈 Kim tự tháp (1 - 2 - 3 - 2 - 1)</button>
+            <button class="preset-btn" onclick="applyPreset([0, 0, 0, 0, 0])">🛑 Reset (Tất cả = 0)</button>
+          </div>
+
+          <!-- Controls Container -->
+          <div class="control-panel">
+            <!-- Item sliders -->
+            <div class="item-sliders-grid">
+              <div class="slider-group">
+                <label for="grow-1">Div 1 flex-grow: <span id="val-1" class="grow-tag">0</span></label>
+                <input type="range" id="grow-1" min="0" max="8" step="1" value="0" oninput="updatePlayground()">
+              </div>
+              <div class="slider-group highlight-slider">
+                <label for="grow-2">Div 2 (Target) flex-grow: <span id="val-2" class="grow-tag active">1</span></label>
+                <input type="range" id="grow-2" min="0" max="8" step="1" value="1" oninput="updatePlayground()">
+              </div>
+              <div class="slider-group">
+                <label for="grow-3">Div 3 flex-grow: <span id="val-3" class="grow-tag">0</span></label>
+                <input type="range" id="grow-3" min="0" max="8" step="1" value="0" oninput="updatePlayground()">
+              </div>
+              <div class="slider-group">
+                <label for="grow-4">Div 4 flex-grow: <span id="val-4" class="grow-tag">0</span></label>
+                <input type="range" id="grow-4" min="0" max="8" step="1" value="0" oninput="updatePlayground()">
+              </div>
+              <div class="slider-group">
+                <label for="grow-5">Div 5 flex-grow: <span id="val-5" class="grow-tag">0</span></label>
+                <input type="range" id="grow-5" min="0" max="8" step="1" value="0" oninput="updatePlayground()">
+              </div>
+            </div>
+
+            <div class="general-controls">
+              <div class="slider-group">
+                <label for="container-gap">Khoảng cách gap: <span id="val-gap" class="grow-tag">12px</span></label>
+                <input type="range" id="container-gap" min="0" max="32" step="4" value="12" oninput="updatePlayground()">
+              </div>
+              <div class="slider-group">
+                <label for="base-width">Độ rộng cơ sở mỗi item: <span id="val-base" class="grow-tag">90px</span></label>
+                <input type="range" id="base-width" min="50" max="150" step="10" value="90" oninput="updatePlayground()">
+              </div>
+            </div>
+          </div>
+
+          <!-- Live Canvas Container -->
+          <div class="live-visualizer">
+            <div class="visualizer-header">
+              <div>
+                <strong>Container Flex Preview</strong> 
+                <span id="container-dim" class="dim-badge">Chiều rộng: 100%</span>
+              </div>
+              <div id="stats-summary" class="stats-badge">
+                Tổng flex-grow: <strong>1</strong>
+              </div>
+            </div>
+
+            <div class="interactive-flex-container" id="interactive-container">
+              <div class="flex-box-item item-p1" id="p-item-1">
+                <div class="p-title">Div 1</div>
+                <div class="p-grow">grow: <span id="p-grow-1">0</span></div>
+                <div class="p-size" id="p-size-1">--px</div>
+              </div>
+              <div class="flex-box-item item-p2 target-item" id="p-item-2">
+                <div class="p-title">★ Div 2</div>
+                <div class="p-grow">grow: <span id="p-grow-2">1</span></div>
+                <div class="p-size" id="p-size-2">--px</div>
+              </div>
+              <div class="flex-box-item item-p3" id="p-item-3">
+                <div class="p-title">Div 3</div>
+                <div class="p-grow">grow: <span id="p-grow-3">0</span></div>
+                <div class="p-size" id="p-size-3">--px</div>
+              </div>
+              <div class="flex-box-item item-p4" id="p-item-4">
+                <div class="p-title">Div 4</div>
+                <div class="p-grow">grow: <span id="p-grow-4">0</span></div>
+                <div class="p-size" id="p-size-4">--px</div>
+              </div>
+              <div class="flex-box-item item-p5" id="p-item-5">
+                <div class="p-title">Div 5</div>
+                <div class="p-grow">grow: <span id="p-grow-5">0</span></div>
+                <div class="p-size" id="p-size-5">--px</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Generated CSS Output -->
+          <div class="generated-output">
+            <div class="output-header">
+              <span>CSS được sinh ra tự động:</span>
+              <button class="copy-code-btn" onclick="copyCode('generated-css-code', this)">Copy Generated CSS</button>
+            </div>
+            <pre><code id="generated-css-code">/* Chờ cập nhật... */</code></pre>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- Section 5: Bảng so sánh flex-grow vs các thuộc tính flex khác -->
+      <section class="card">
+        <div class="card-header">
+          <div class="card-icon">💡</div>
+          <div>
+            <h2 class="card-title">5. Phân biệt flex-grow, flex-shrink và flex-basis</h2>
+            <p class="card-desc">Hiểu bộ 3 cốt lõi tạo nên thuộc tính gộp viết tắt <code>flex: flex-grow flex-shrink flex-basis;</code></p>
+          </div>
+        </div>
+
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="comparison-table">
+              <thead>
+                <tr>
+                  <th>Thuộc tính</th>
+                  <th>Mặc định</th>
+                  <th>Mục đích</th>
+                  <th>Khi nào được kích hoạt?</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="highlight-row">
+                  <td><code>flex-grow</code></td>
+                  <td><code>0</code></td>
+                  <td>Chỉ định tỷ lệ <strong>nở rộng</strong> để hấp thụ không gian còn thừa.</td>
+                  <td>Khi container <strong>còn dư chỗ</strong> (∑ item &lt; container).</td>
+                </tr>
+                <tr>
+                  <td><code>flex-shrink</code></td>
+                  <td><code>1</code></td>
+                  <td>Chỉ định tỷ lệ <strong>thu nhỏ</strong> khi không đủ chỗ.</td>
+                  <td>Khi container <strong>bị tràn / thiếu chỗ</strong> (∑ item &gt; container).</td>
+                </tr>
+                <tr>
+                  <td><code>flex-basis</code></td>
+                  <td><code>auto</code></td>
+                  <td>Kích thước <strong>khởi điểm</strong> của item trước khi chia chác.</td>
+                  <td>Luôn được tính toán đầu tiên trước grow và shrink.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <p>© 2026 Bài thực hành CSS flex-grow Property | Mã nguồn đã được chuẩn hóa và kiểm thử</p>
+      <p class="repo-info">
+        Repository: <code>git@github.com:nda2801/thuc-hanh-CSS-flex-grow-Property.git</code>
+      </p>
+    </footer>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
