@@ -83,9 +83,4 @@ thuc-hanh-CSS-flex-grow-Property/
 1. Mở file `index.html` hoặc `example.html` trực tiếp bằng trình duyệt web (Google Chrome, Edge, Firefox, v.v.).
 2. Hoặc sử dụng extension **Live Server** trong VS Code để trải nghiệm đầy đủ các tính năng tương tác mượt mà.
 
----
 
-## 🔗 Git Repository
-```bash
-git@github.com:nda2801/thuc-hanh-CSS-flex-grow-Property.git
-```
